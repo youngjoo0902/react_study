@@ -21,7 +21,6 @@
 - 함수형에서 state를 사용하려면, useState 를 사용한다. 초기값은 객체가 아니어도 된다.
 - props로 받아온 값은 컴포넌트가 읽기만 가능하고, 변경할 수 없다. 값을 변경할때는 state, setState를 사용한다. 함수형은 useState
 - setState 두번째 인자로 함수를 추가하면, setState가 끝난후 동작을 추가할 수 있다.
-- 일반함수는 자신이 속한 객체를 this로 가리키고, () => 함수는 자신이 속한 인스턴스를 this로 가리킨다.
 - propTypes 종류 : array, arrayOf, bool, func, number, object, string, symbol, node, instanceOf, oneOf, oneOfType, objectOf, shape, any
 - render 에서는 아무것도 반환할게 없으면, false 나 null을 반환해야 함
 - 배열이나 객체에 대한 업데이트를 하려면, 사본을 만들어서 사본에 업데이트 한다.
