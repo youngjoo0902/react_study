@@ -21,14 +21,40 @@
 - 함수형에서 state를 사용하려면, useState 를 사용한다. 초기값은 객체가 아니어도 된다.
 - props로 받아온 값은 컴포넌트가 읽기만 가능하고, 변경할 수 없다. 값을 변경할때는 state, setState를 사용한다. 함수형은 useState
 - setState 두번째 인자로 함수를 추가하면, setState가 끝난후 동작을 추가할 수 있다.
-- 일반함수는 자신이 속한 객체를 this로 가리키고, () => 함수는 자신이 속한 인스턴스를 this로 가리킨다.
 - propTypes 종류 : array, arrayOf, bool, func, number, object, string, symbol, node, instanceOf, oneOf, oneOfType, objectOf, shape, any
 - render 에서는 아무것도 반환할게 없으면, false 나 null을 반환해야 함
 - 배열이나 객체에 대한 업데이트를 하려면, 사본을 만들어서 사본에 업데이트 한다.
 - 이벤트는 돔 요소에만 설정할 수 있고, 컴포넌트에는 설정할 수 없다.
 - 이벤트 실행후, 일정 시간이 흐르고, 이후 실행되는 함수에서 e 객체를 참조할 일이 있으면, e.persist(); 함수를 한줄 써줘야 한다.
 - 메서드 바인딩은 생성자에서 하는게 정석이나, 바벨에서 transform-class-properties 문법을 사용하여 화살표 함수 형태로 메서드를 정의할수 있다.
-
+- dom에 값을 주거나 변경하는 것은 state, props 로 가능하지만 dom을 조작할때는 ref를 사용한다. input에 포커스, 스크롤박스 조작, canvas 그림그리기 등...
+- 콜백으로 ref 설정 : <input ref={(ref) => {this.명칭 = ref}} /> 했을때, this.명칭은 해당 dom 요소를 가리킨다. 결과 <input ref={this.명칭}> 이 되므로, 어떤 이벤트 호출부에서 this.명칭.focus() 와 같은 수행이 가능해진다.
+- 16.3 이후 버전에서 createRef 를 사용하는데, 편한 방법으로 사용하면 된다.
+- 컴포넌트에도 ref를 달 수 있다. 컴포넌트 외부에서 내부에 있는 dom에 접근할때 쓴다. dom과 동일하게 설정하면 된다.
+- 컴포넌트에 ref를 달면, 내부의 이벤트나 dom에 접근할 수 있다. (myComponent.handleClick , myComponent.wrapElement 식으로...)
+- 서로 다른 컴포넌트끼리 ref를 통해 데이터를 전달하지 말 것. 잡채된다.
+- 비구조화 문법은 es6 에서 도입된 문법이다. (babel 환경 또는 es6 지원되는 브라우저에서만 사용할것)
+- 배열.map() 은 es5에 도입되었는데, 콜백 뒤에 붙는 파라미터는 어케쓰는지 모르겠다.
+- map() 은 새로운 배열로 재구성해서 새로운 변수에 할당하기 때문에, 값을 변경하더라도 참조 방식이 아니므로 원본에 변경이 일어나지 않는다.
+- push 함수는 기존의 배열을 변경하고, concat() 은 새로운 배열을 만들어준다.
+- 리액트에서 상태를 업데이트할때는 기존 상태를 그대로 두면서 새로운 값을 상태로 설정해야 한다. 이를 불변성 유지라고 한다. (성능최적화를 위해...)
+- key 값이 중복되면 오류난다.
+- 라이프 사이클 메서드중 will 접두사가 붙은것은 어떤 작업을 작동하기전 메서드이고, did는 작동후 메서드이다. (마운트, 업데이트, 언마운트)
+- 마운트 = 돔이 생성되고, 브라우저에 나타났을때가 마운트
+- 컴포넌트는 네가지 경우에 업데이트한다. (props가 바뀔때, state가 바뀔때, 부모 컴포넌트가 리렌더링 될때, this.forceUpdate로 강제로 렌더링을 트리거할때)
+- props의 값이 바뀌면 컴포넌트 렌더링이 이루어진다.
+- 컴포넌트가 들고 있는 state가 setState를 통해 업데이트 될때, 컴포넌트가 업데이트 된다.
+- 부모 컴포넌트가 리렌더링 되면 자식 컴포넌트도 리렌더링 된다.
+- getDerivedStateFromProps(nexpProps, prevState){} = props에 있는 값을 state도 바뀌게 하고 싶을때 사용하는 메서드
+- shouldComponentUpdate(nextProps, nextState) = 컴포넌트가 리렌더링을 할지, 말지 결정하는 메서드. false를 반환하면 작업을 중지하고 컴포넌트가 리렌더링 되지 않음. 특정 함수에서 this.forceUpdate() 를 호출하면, 이 과정을 생략하고 바로 render를 호출함. (this.props, this.state로 접근하고, 새로 설정할땐 nextProps와 nextState로 접근할 수 있다.)
+- render = 컴포넌트를 리렌더링 함(필수)
+- getSnapshotBeforeUpdate(prevProps, prevState){} = 컴포넌트 변화를 dom에 반영하기 바로 직전 호출하는 메서드
+- componentDidMount = 컴포넌트가 웹 브라우저에 나타난 후 호출하는 메서드
+- ComponentWillUnmount = 컴포넌트가 브라우저에서 사라지기전 호출하는 메서드
+- render 안에서는 setState를 사용하면 안되고, dom 에 접근해서도 안된다. 그건 componentDidMount 에서 처리해야 한다.
+- componentDidUpdate(prevProps, prevState, snapShot){} = 리렌더링 완료후 실행됨. 컴포넌트가 이전에 가졌던 값을 읽을 수 있고, getSnapshotBeforeUpdate 에서 반환한 값이 있으면, 여기서 snapshot 값을 전달받을 수 있다.
+- componentWillUnmout(){} = 컴포넌트를 dom에서 제거할때 실행함. componentDidMount 에서 등록한 이벤트, 타이머, 생성한 dom 있으면 여기서 제거하면 됨.
+- componentDidCatch(error, info){} = 렌더링 도중 에러가 발생했을때, 먹통이 되지 않고 오류 UI를 보여줌.
 
 
 
