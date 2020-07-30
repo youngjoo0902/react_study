@@ -14,6 +14,7 @@ const MemberInsert = () =>{
         gender : "",
         birth : ""
     });
+    const {no, username, phone, gender, birth} = info;//dom 에 매칭시킬때 사용될 키워드를 비구조화 할당
     
     const changeValue = e => {//매 입력시마다, 자기자신의 name에 맞게 value가 꼽힘 (info에 들어감)
         const cloneValue = {
