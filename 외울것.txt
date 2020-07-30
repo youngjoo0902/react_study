@@ -16,7 +16,8 @@
 - 컴포넌트에서 undefined 를 반환하면, 에러난다. jsx 에서 undefined를 출력하는 것은 괜찮다.
 - jsx에서 닫는 태그가 없는 경우나, 자식요소가 없는 빈 태그는 셀프클로저를 사용하면 된다.
 - 클래스형 컴포넌트는 render() 함수가 꼭 있어야 하고, jsx를 반환해야 한다.
-- 클래스형 컴포넌트는 state, 라이프사이클기능을 사용할 수 있고, 임의 메서드를 정의할 수 있다. 함수형에서는 못쓰지만, hooks를 통해 비슷하게 구현할 수 있다.
+- 클래스형 컴포넌트는 state, 라이프사이클기능을 사용할 수 있고, 임의 메서드를 정의할 수 있다.
+함수형에서는 못쓰지만, hooks를 통해 비슷하게 구현할 수 있다.
 - 클래스형 컴포넌트의 state 초기값은 객체형식이어야 한다. setState 로 업데이트가 가능하다.
 - 함수형에서 state를 사용하려면, useState 를 사용한다. 초기값은 객체가 아니어도 된다.
 - props로 받아온 값은 컴포넌트가 읽기만 가능하고, 변경할 수 없다. 값을 변경할때는 state, setState를 사용한다. 함수형은 useState
@@ -28,7 +29,8 @@
 - 이벤트 실행후, 일정 시간이 흐르고, 이후 실행되는 함수에서 e 객체를 참조할 일이 있으면, e.persist(); 함수를 한줄 써줘야 한다.
 - 메서드 바인딩은 생성자에서 하는게 정석이나, 바벨에서 transform-class-properties 문법을 사용하여 화살표 함수 형태로 메서드를 정의할수 있다.
 - dom에 값을 주거나 변경하는 것은 state, props 로 가능하지만 dom을 조작할때는 ref를 사용한다. input에 포커스, 스크롤박스 조작, canvas 그림그리기 등...
-- 콜백으로 ref 설정 : <input ref={(ref) => {this.명칭 = ref}} /> 했을때, this.명칭은 해당 dom 요소를 가리킨다. 결과 <input ref={this.명칭}> 이 되므로, 어떤 이벤트 호출부에서 this.명칭.focus() 와 같은 수행이 가능해진다.
+- 콜백으로 ref 설정 : <input ref={(ref) => {this.명칭 = ref}} /> 했을때, this.명칭은 해당 dom 요소를 가리킨다. 결과 <input ref={this.명칭}> 이 되므로,
+어떤 이벤트 호출부에서 this.명칭.focus() 와 같은 수행이 가능해진다.
 - 16.3 이후 버전에서 createRef 를 사용하는데, 편한 방법으로 사용하면 된다.
 - 컴포넌트에도 ref를 달 수 있다. 컴포넌트 외부에서 내부에 있는 dom에 접근할때 쓴다. dom과 동일하게 설정하면 된다.
 - 컴포넌트에 ref를 달면, 내부의 이벤트나 dom에 접근할 수 있다. (myComponent.handleClick , myComponent.wrapElement 식으로...)
@@ -46,15 +48,27 @@
 - 컴포넌트가 들고 있는 state가 setState를 통해 업데이트 될때, 컴포넌트가 업데이트 된다.
 - 부모 컴포넌트가 리렌더링 되면 자식 컴포넌트도 리렌더링 된다.
 - getDerivedStateFromProps(nexpProps, prevState){} = props에 있는 값을 state도 바뀌게 하고 싶을때 사용하는 메서드
-- shouldComponentUpdate(nextProps, nextState) = 컴포넌트가 리렌더링을 할지, 말지 결정하는 메서드. false를 반환하면 작업을 중지하고 컴포넌트가 리렌더링 되지 않음. 특정 함수에서 this.forceUpdate() 를 호출하면, 이 과정을 생략하고 바로 render를 호출함. (this.props, this.state로 접근하고, 새로 설정할땐 nextProps와 nextState로 접근할 수 있다.)
+- shouldComponentUpdate(nextProps, nextState) = 컴포넌트가 리렌더링을 할지, 말지 결정하는 메서드. false를 반환하면 작업을 중지하고
+컴포넌트가 리렌더링 되지 않음. 특정 함수에서 this.forceUpdate() 를 호출하면, 이 과정을 생략하고 바로 render를 호출함.
+(this.props, this.state로 접근하고, 새로 설정할땐 nextProps와 nextState로 접근할 수 있다.)
 - render = 컴포넌트를 리렌더링 함(필수)
 - getSnapshotBeforeUpdate(prevProps, prevState){} = 컴포넌트 변화를 dom에 반영하기 바로 직전 호출하는 메서드
 - componentDidMount = 컴포넌트가 웹 브라우저에 나타난 후 호출하는 메서드
 - ComponentWillUnmount = 컴포넌트가 브라우저에서 사라지기전 호출하는 메서드
 - render 안에서는 setState를 사용하면 안되고, dom 에 접근해서도 안된다. 그건 componentDidMount 에서 처리해야 한다.
-- componentDidUpdate(prevProps, prevState, snapShot){} = 리렌더링 완료후 실행됨. 컴포넌트가 이전에 가졌던 값을 읽을 수 있고, getSnapshotBeforeUpdate 에서 반환한 값이 있으면, 여기서 snapshot 값을 전달받을 수 있다.
+- componentDidUpdate(prevProps, prevState, snapShot){} = 리렌더링 완료후 실행됨. 컴포넌트가 이전에 가졌던 값을 읽을 수 있고,
+getSnapshotBeforeUpdate 에서 반환한 값이 있으면, 여기서 snapshot 값을 전달받을 수 있다.
 - componentWillUnmout(){} = 컴포넌트를 dom에서 제거할때 실행함. componentDidMount 에서 등록한 이벤트, 타이머, 생성한 dom 있으면 여기서 제거하면 됨.
 - componentDidCatch(error, info){} = 렌더링 도중 에러가 발생했을때, 먹통이 되지 않고 오류 UI를 보여줌.
+- 함수형에서 useEffect() 는 첫렌더링이 끝났을때와, 업데이트가 끝났을때 호출된다. 그러나 마운트 되었을때만 호출되게 하려면,
+useEffect( ( ) => {}, [] ) 두번째 인자로 빈 배열을 넘겨주면 된다.
+특정값이 바뀔때만 호출하려면, 빈 배열안에 검사하고 싶은 값을 넣어주면 된다. 배열안에는 useState를 통해 관리되고 있는 상태나 props로 받은 값을 넣어도 된다.
+- useReducer(otherFunc, {default : 11}) = 첫번째 파라미터는 호출할 함수, 두번째는 해당 리듀서의 기본값
+useState 를 사용할때와 비슷하게, const [aa, bb] = useReducer(함수, 기본값) 설정한후, bb를 사용하면 리듀서에 정의된 함수를 호출할 수 있다.
+기본값과 같은 형태의 데이터 구조를 파라미터로 던지면,  리듀서에 정의된 함수 구조에 따라 case별 리턴값을 받아온다.
+- useReducer의 장점은, 컴포넌트 업데이트 로직을 컴포넌트 바깥으로 빼낼수 있다.
+- useReducer에서 호출되는 함수의 action parameter 에는 그 어떤값이 넘어와도 무방하니, 자유롭게 네이밍 하면 된다.
+- useMemo 를 사용하면, 함수형 컴포넌트 내부에서 발생하는 연산을 최적화 할 수 있다.
 
 
 
